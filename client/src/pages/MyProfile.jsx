@@ -54,8 +54,13 @@ const MyProfile = () => {
                 isEdit
                 ? <label htmlFor='image'>
                     <div className='inline-block cursor-pointer relative'>
-                        <img className="w-36 rounded opacity-75" src={image ? URL.createObjectURL(image) : userData.image} alt='' />
-                        <img className='w-10 absolute bottom-2 right-12' src={image ? '' : assets.upload_area} alt='' />
+                        <img className="w-36 rounded opacity-75" src={image ? URL.createObjectURL(image) 
+                        : 
+                        (userData.image || assets.upload_area)
+                        } alt='' />
+                        {!image  && 
+                            <img className='w-10 absolute bottom-[-10] right-12' src={assets.upload_area} alt='Upload Icon' />
+                        }
                     </div>
                     <input onChange={(e) => setImage(e.target.files[0])} type='file' id='image' hidden />
                 </label>
@@ -84,15 +89,21 @@ const MyProfile = () => {
                         isEdit
                         ? 
                         <p>
-                            <input className="bg-gray-50" type='text' onChange={(e) => setUserData(prev => ({...prev, address : {...prev.address, line1 : e.target.value}}))}/>
+                            <input className="bg-gray-100 mb-2" 
+                            type='text' 
+                            value={userData.address?.line1 || ''}
+                            onChange={(e) => setUserData(prev => ({...prev, address : {...prev.address, line1 : e.target.value}}))}/>
                             <br/>
-                            <input className="bg-gray-50" type='text' onChange={(e) => setUserData(prev => ({...prev, address : {...prev.address, line2: e.target.value}}))}/>
+                            <input className="bg-gray-100" 
+                            type='text' 
+                            value={userData.address?.line2 || ''} 
+                            onChange={(e) => setUserData(prev => ({...prev, address : {...prev.address, line2: e.target.value}}))}/>
                         </p>
                         :
                         <p className="text-gray-500">
-                            {userData.address.line1}
+                            {userData.address?.line1 || 'No address provided'}
                             <br/>
-                            {userData.address.line2}
+                            {userData.address?.line2 || ''}
                         </p>
                     }
                 </div>
